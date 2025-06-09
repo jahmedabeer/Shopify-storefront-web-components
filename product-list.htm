@@ -7,30 +7,31 @@
     <title>Storefront Web Components</title>
     <style>
         /** Product card style **/
-        .product-layout {
-            display: flex;
+        .product-list {
+            margin: 0 auto;
+            display: grid;
+            gap: 1rem;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            justify-items: center;
+            align-items: start;
         }
 
         .product-card {
-            max-width: 80rem;
-            background-color: #ffffff;
-            display: flex;
-            flex-direction: column;
-            gap: 1em;
-            border-radius: 12px;
-        }
-
-        .product-card__container {
-            display: flex;
-            flex-direction: column;
-            padding: 1rem;
-            box-sizing: border-box;
+            background: #fff;
+            border: 1px solid #c5c4c4;
+            border-radius: 0.625rem;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+            cursor: pointer;
+            overflow: hidden;
+            padding: 0.5rem;
+            position: relative;
+            transition: box-shadow 0.2s ease-in-out;
         }
 
         .product-card__media {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
+            border-radius: 0.625rem;
+
+            overflow: hidden;
             width: 100%;
         }
 
@@ -76,14 +77,13 @@
         public-access-token="4f45420259b3008c68c43acc24c6aada"></shopify-store>
 
     <div class="product-layout">
-        <div class="product-card">
+        <div class="product-list">
             <!--  https://shopify.dev/docs/api/storefront-web-components/components/shopify-context : This defines which Shopify data will be available -->
-            <shopify-context type="product"
-                handle="turmeric-curcumin-plus-liposomal-extract-with-black-pepper-ginger-4oz">
+            <shopify-list-context type="product" query="products" first="5">
 
                 <!-- requires a template component, which contains the data you want to display -->
                 <template>
-                    <div class="product-card__container">
+                    <div class="product-card">
                         <div class="product-card__media">
                             <div class="product-card__main-image">
                                 <!-- https://shopify.dev/docs/api/storefront-web-components/components/shopify-media -->
@@ -106,7 +106,7 @@
                         </div>
                     </div>
                 </template>
-            </shopify-context>
+            </shopify-list-context>
         </div>
     </div>
 </body>
