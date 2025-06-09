@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Storefront Web Components</title>
+    <style>
+        /** Product card style **/
+        .product-layout {
+            display: flex;
+        }
+
+        .product-card {
+            max-width: 80rem;
+            background-color: #ffffff;
+            display: flex;
+            flex-direction: column;
+            gap: 1em;
+            border-radius: 12px;
+        }
+
+        .product-card__container {
+            display: flex;
+            flex-direction: column;
+            padding: 1rem;
+            box-sizing: border-box;
+        }
+
+        .product-card__media {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            width: 100%;
+        }
+
+        .product-card__main-image img {
+            border-radius: 0.5rem;
+        }
+
+        .product-card__details {
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+            width: 100%;
+            margin-top: 0.5rem;
+        }
+
+        .product-card__info {
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+
+        .product-card__title {
+            font-size: 1.125rem;
+            font-weight: 700;
+            margin: 0;
+        }
+
+        .product-card__price {
+            display: flex;
+            gap: 0.5rem;
+            font-size: 1rem;
+            font-weight: 500;
+        }
+
+        .product-card__view-button {
+            background-color: #000000;
+            color: #ffffff;
+            border-radius: 0.75rem;
+            padding: 1rem;
+            font-size: 0.875rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            transition: background-color 0.3s ease, color 0.3s ease;
+            border: 2px solid black;
+            cursor: pointer;
+        }
+
+        .product-card__view-button:hover {
+            background: #ffffff;
+            color: #000000;
+            border: 2px solid black;
+        }
+    </style>
+</head>
+
+<body>
+    <!-- web components -->
+    <script src="https://cdn.shopify.com/storefront/web-components.js"></script>
+
+    <!-- https://shopify.dev/docs/api/storefront-web-components/components/shopify-store : set up your credentials and market configuration for a storefront -->
+    <shopify-store store-domain="https://jakdevstore.myshopify.com" country="US" language="en"
+        public-access-token="4f45420259b3008c68c43acc24c6aada"></shopify-store>
+
+    <div class="product-layout">
+        <div class="product-card">
+            <!--  https://shopify.dev/docs/api/storefront-web-components/components/shopify-context : This defines which Shopify data will be available -->
+            <shopify-context type="product"
+                handle="turmeric-curcumin-plus-liposomal-extract-with-black-pepper-ginger-4oz">
+
+                <!-- requires a template component, which contains the data you want to display -->
+                <template>
+                    <div class="product-card__container">
+                        <div class="product-card__media">
+                            <div class="product-card__main-image">
+                                <!-- https://shopify.dev/docs/api/storefront-web-components/components/shopify-media -->
+                                <shopify-media width="280" height="280"
+                                    query="product.selectedOrFirstAvailableVariant.image"></shopify-media>
+                            </div>
+                        </div>
+                        <div class="product-card__details">
+                            <div class="product-card__info">
+                                <h2 class="product-card__title">
+                                    <!-- https://shopify.dev/docs/api/storefront-web-components/components/shopify-data -->
+                                    <shopify-data query="product.title"></shopify-data>
+                                </h2>
+                                <div class="product-card__price">
+                                    <!-- https://shopify.dev/docs/api/storefront-web-components/components/shopify-money -->
+                                    <shopify-money
+                                        query="product.selectedOrFirstAvailableVariant.price"></shopify-money>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </template>
+            </shopify-context>
+        </div>
+    </div>
+</body>
+
+</html>
