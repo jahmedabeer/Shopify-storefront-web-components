@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Storefront Web Components</title>
+</head>
+
+<body>
+    <script src="https://cdn.shopify.com/storefront/web-components.js"></script>
+
+    <!-- https://shopify.dev/docs/api/storefront-web-components/components/shopify-store -->
+    <shopify-store store-domain="https://jakdevstore.myshopify.com" country="US" language="en">
+
+        <!-- https://shopify.dev/docs/api/storefront-web-components/components/shopify-context -->
+        <shopify-context type="product" handle="turmeric-curcumin-plus-liposomal-extract-with-black-pepper-ginger-4oz">
+            <template>
+
+            </template>
+        </shopify-context>
+    </shopify-store>
+</body>
+
+</html>
