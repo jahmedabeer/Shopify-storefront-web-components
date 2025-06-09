@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Storefront Web Components</title>
+    <style>
+        header {
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+            padding: 1rem;
+            border: 1px solid #ccc;
+            margin-bottom: 1rem;
+        }
+
+        .button-30 {
+            align-items: center;
+            appearance: none;
+            background-color: #FCFCFD;
+            border-radius: 4px;
+            border-width: 0;
+            box-shadow: rgba(45, 35, 66, 0.4) 0 2px 4px, rgba(45, 35, 66, 0.3) 0 7px 13px -3px, #D6D6E7 0 -3px 0 inset;
+            box-sizing: border-box;
+            color: #36395A;
+            cursor: pointer;
+            display: inline-flex;
+            font-family: "JetBrains Mono", monospace;
+            height: 48px;
+            justify-content: center;
+            line-height: 1;
+            list-style: none;
+            overflow: hidden;
+            padding-left: 16px;
+            padding-right: 16px;
+            position: relative;
+            text-align: left;
+            text-decoration: none;
+            transition: box-shadow .15s, transform .15s;
+            user-select: none;
+            -webkit-user-select: none;
+            touch-action: manipulation;
+            white-space: nowrap;
+            will-change: box-shadow, transform;
+            font-size: 18px;
+        }
+
+        .button-30:focus {
+            box-shadow: #D6D6E7 0 0 0 1.5px inset, rgba(45, 35, 66, 0.4) 0 2px 4px, rgba(45, 35, 66, 0.3) 0 7px 13px -3px, #D6D6E7 0 -3px 0 inset;
+        }
+
+        .button-30:hover {
+            box-shadow: rgba(45, 35, 66, 0.4) 0 4px 8px, rgba(45, 35, 66, 0.3) 0 7px 13px -3px, #D6D6E7 0 -3px 0 inset;
+            transform: translateY(-2px);
+        }
+
+        .button-30:active {
+            box-shadow: #D6D6E7 0 3px 7px inset;
+            transform: translateY(2px);
+        }
+
+        /** Product card style **/
+        .product-list {
+            margin: 0 auto;
+            display: grid;
+            gap: 1rem;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            justify-items: center;
+            align-items: start;
+        }
+
+        .product-card {
+            background: #fff;
+            border: 1px solid #c5c4c4;
+            border-radius: 0.625rem;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+            cursor: pointer;
+            overflow: hidden;
+            padding: 0.5rem;
+            position: relative;
+            transition: box-shadow 0.2s ease-in-out;
+        }
+
+        .product-card__media {
+            border-radius: 0.625rem;
+            overflow: hidden;
+            width: 100%;
+        }
+
+        .product-card__main-image img {
+            border-radius: 0.5rem;
+        }
+
+        .product-card__details {
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+            width: 100%;
+            margin-top: 0.5rem;
+        }
+
+        .product-card__info {
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+
+        .product-card__title {
+            font-size: 1.125rem;
+            font-weight: 700;
+            margin: 0;
+        }
+
+        .product-card__price {
+            display: flex;
+            gap: 0.5rem;
+            font-size: 1rem;
+            font-weight: 500;
+        }
+    </style>
+</head>
+
+<body>
+    <!-- web components -->
+    <script src="https://cdn.shopify.com/storefront/web-components.js"></script>
+
+    <!-- https://shopify.dev/docs/api/storefront-web-components/components/shopify-store : set up your credentials and market configuration for a storefront -->
+    <shopify-store store-domain="https://jakdevstore.myshopify.com" country="US" language="en"
+        public-access-token="4f45420259b3008c68c43acc24c6aada"></shopify-store>
+
+    <!-- https://shopify.dev/docs/api/storefront-web-components/components/shopify-cart -->
+    <shopify-cart id="cart"></shopify-cart>
+
+    <header>
+        <button class="button-30" onclick="document.getElementById('cart').showModal()">View cart</button>
+    </header>
+
+    <div class="product-layout">
+        <div class="product-list">
+            <!--  https://shopify.dev/docs/api/storefront-web-components/components/shopify-context : This defines which Shopify data will be available -->
+            <shopify-list-context type="product" query="products" first="5">
+
+                <!-- requires a template component, which contains the data you want to display -->
+                <template>
+                    <div class="product-card">
+                        <div class="product-card__media">
+                            <div class="product-card__main-image">
+                                <!-- https://shopify.dev/docs/api/storefront-web-components/components/shopify-media -->
+                                <shopify-media width="280" height="280"
+                                    query="product.selectedOrFirstAvailableVariant.image"></shopify-media>
+                            </div>
+                        </div>
+                        <div class="product-card__details">
+                            <div class="product-card__info">
+                                <h2 class="product-card__title">
+                                    <!-- https://shopify.dev/docs/api/storefront-web-components/components/shopify-data -->
+                                    <shopify-data query="product.title"></shopify-data>
+                                </h2>
+                                <div class="product-card__price">
+                                    <!-- https://shopify.dev/docs/api/storefront-web-components/components/shopify-money -->
+                                    <shopify-money
+                                        query="product.selectedOrFirstAvailableVariant.price"></shopify-money>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- https://shopify.dev/docs/api/storefront-web-components/components/shopify-variant-selector -->
+                        <shopify-variant-selector></shopify-variant-selector>
+
+                        <button style="margin-top: 1rem;" class="button-30"
+                            onclick="document.getElementById('cart').addLine(event).showModal()">Add to
+                            cart</button>
+                    </div>
+                </template>
+            </shopify-list-context>
+        </div>
+    </div>
+</body>
+
+</html>
