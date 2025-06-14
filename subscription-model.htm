@@ -1,0 +1,471 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Storefront Web Components</title>
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
+      body {
+        font-family: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI",
+          sans-serif;
+        font-weight: 400;
+        line-height: 1.6;
+        color: #333;
+        min-height: 100vh;
+      }
+
+      header {
+        box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1),
+          0 2px 4px -1px rgba(0, 0, 0, 0.06);
+        padding: 1rem;
+        border: 1px solid #ccc;
+        margin-bottom: 1rem;
+      }
+
+      .button-30 {
+        align-items: center;
+        appearance: none;
+        background-color: #fcfcfd;
+        border-radius: 4px;
+        border-width: 0;
+        box-shadow: rgba(45, 35, 66, 0.4) 0 2px 4px,
+          rgba(45, 35, 66, 0.3) 0 7px 13px -3px, #d6d6e7 0 -3px 0 inset;
+        box-sizing: border-box;
+        color: #36395a;
+        cursor: pointer;
+        display: inline-flex;
+        font-family: "JetBrains Mono", monospace;
+        height: 48px;
+        justify-content: center;
+        line-height: 1;
+        list-style: none;
+        overflow: hidden;
+        padding-left: 16px;
+        padding-right: 16px;
+        position: relative;
+        text-align: left;
+        text-decoration: none;
+        transition: box-shadow 0.15s, transform 0.15s;
+        user-select: none;
+        -webkit-user-select: none;
+        touch-action: manipulation;
+        white-space: nowrap;
+        will-change: box-shadow, transform;
+        font-size: 18px;
+      }
+
+      .button-30:focus {
+        box-shadow: #d6d6e7 0 0 0 1.5px inset, rgba(45, 35, 66, 0.4) 0 2px 4px,
+          rgba(45, 35, 66, 0.3) 0 7px 13px -3px, #d6d6e7 0 -3px 0 inset;
+      }
+
+      .button-30:hover {
+        box-shadow: rgba(45, 35, 66, 0.4) 0 4px 8px,
+          rgba(45, 35, 66, 0.3) 0 7px 13px -3px, #d6d6e7 0 -3px 0 inset;
+        transform: translateY(-2px);
+      }
+
+      .button-30:active {
+        box-shadow: #d6d6e7 0 3px 7px inset;
+        transform: translateY(2px);
+      }
+
+      .container {
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 2rem;
+      }
+
+      .product-page {
+        background: white;
+        border-radius: 20px;
+        box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+        overflow: hidden;
+        backdrop-filter: blur(10px);
+      }
+
+      .product-container {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 0;
+        min-height: 600px;
+      }
+
+      .product-image-section {
+        background: #f8f9fa;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 3rem;
+      }
+
+      .product-image {
+        max-width: 100%;
+        height: auto;
+        border-radius: 12px;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+      }
+
+      .product-details-section {
+        padding: 3rem;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+      }
+
+      .product-header {
+        margin-bottom: 2rem;
+      }
+
+      .product-title {
+        font-size: 2.5rem;
+        font-weight: 700;
+        color: #1a1a1a;
+        margin-bottom: 1rem;
+        line-height: 1.2;
+      }
+
+      .product-description {
+        font-size: 1.1rem;
+        color: #666;
+        line-height: 1.6;
+        margin-bottom: 2rem;
+      }
+
+      .subscription-section {
+        margin-bottom: 2rem;
+      }
+
+      .subscription-title {
+        font-size: 1.3rem;
+        font-weight: 600;
+        color: #333;
+        margin-bottom: 1.5rem;
+        display: flex;
+        align-items: center;
+      }
+
+      .subscription-title::before {
+        content: "🔄";
+        margin-right: 0.5rem;
+      }
+
+      .selling-plans {
+        display: flex;
+        flex-direction: column;
+        gap: 1rem;
+      }
+
+      .selling-plan-option {
+        transition: all 0.2s ease;
+      }
+
+      .selling-plan-label {
+        display: flex;
+        align-items: flex-start;
+        padding: 1.5rem;
+        border: 2px solid #e1e5e9;
+        border-radius: 12px;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        background: #fafbfc;
+        position: relative;
+      }
+
+      .selling-plan-label:hover {
+        border-color: #667eea;
+        background: #f8f9ff;
+        transform: translateY(-2px);
+        box-shadow: 0 8px 25px rgba(102, 126, 234, 0.15);
+      }
+
+      .selling-plan-radio {
+        display: none;
+      }
+
+      .selling-plan-radio:checked ~ * {
+        /* Style when checked */
+      }
+
+      .selling-plan-label:has(.selling-plan-radio:checked) {
+        border-color: #667eea;
+        background: #f8f9ff;
+        box-shadow: 0 8px 25px rgba(102, 126, 234, 0.15);
+      }
+
+      .selling-plan-content {
+        flex: 1;
+        margin-right: 1rem;
+      }
+
+      .selling-plan-header {
+        display: flex;
+        align-items: center;
+        margin-bottom: 0.5rem;
+      }
+
+      .selling-plan-name {
+        font-weight: 600;
+        font-size: 1.1rem;
+        color: #333;
+      }
+
+      .selling-plan-description {
+        color: #666;
+        font-size: 0.95rem;
+        line-height: 1.4;
+      }
+
+      .add-to-cart-btn {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        color: white;
+        border: none;
+        padding: 1rem 2rem;
+        font-size: 1.1rem;
+        font-weight: 600;
+        border-radius: 12px;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 0.5rem;
+        box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3);
+        width: 100%;
+      }
+
+      .add-to-cart-btn:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 8px 25px rgba(102, 126, 234, 0.4);
+      }
+
+      .add-to-cart-btn:active {
+        transform: translateY(0);
+      }
+
+      /* Responsive Design */
+      .container {
+        padding: 1rem;
+      }
+
+      .product-container {
+        grid-template-columns: 1fr;
+      }
+
+      .product-image-section {
+        padding: 2rem;
+      }
+
+      .product-details-section {
+        padding: 2rem;
+      }
+
+      .product-title {
+        font-size: 2rem;
+      }
+
+      .selling-plan-label {
+        padding: 1rem;
+      }
+
+      /* Loading Animation */
+      @keyframes fadeIn {
+        from {
+          opacity: 0;
+          transform: translateY(20px);
+        }
+
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+
+      .product-page {
+        animation: fadeIn 0.6s ease-out;
+      }
+    </style>
+  </head>
+
+  <body>
+    <!-- web components -->
+    <script src="https://cdn.shopify.com/storefront/web-components.js"></script>
+
+    <!-- https://shopify.dev/docs/api/storefront-web-components/components/shopify-store : set up your credentials and market configuration for a storefront -->
+    <shopify-store
+      store-domain="https://jakdevstore.myshopify.com"
+      country="US"
+      language="en"
+      public-access-token="4f45420259b3008c68c43acc24c6aada"
+    ></shopify-store>
+
+    <!-- https://shopify.dev/docs/api/storefront-web-components/components/shopify-cart -->
+    <shopify-cart id="cart"></shopify-cart>
+
+    <header>
+      <button
+        class="button-30"
+        onclick="document.getElementById('cart').showModal()"
+      >
+        View cart
+      </button>
+    </header>
+
+    <shopify-context type="product" handle="21-in-aero-wheel-cover">
+      <template>
+        <div class="product-page">
+          <div class="product-container">
+            <div class="product-image-section">
+              <shopify-media
+                query="product.featuredImage"
+                class="product-image"
+                width="500"
+                height="500"
+              ></shopify-media>
+            </div>
+
+            <div class="product-details-section">
+              <div class="product-header">
+                <h1 class="product-title">
+                  <shopify-data query="product.title"></shopify-data>
+                </h1>
+                <div class="product-card__price">
+                  <!-- https://shopify.dev/docs/api/storefront-web-components/components/shopify-money -->
+                  <shopify-money
+                    query="product.selectedOrFirstAvailableVariant.price"
+                  ></shopify-money>
+                </div>
+                <p class="product-description">
+                  <shopify-data query="product.description"></shopify-data>
+                </p>
+              </div>
+
+              <form class="product-form" onsubmit="addToCart(event)">
+                <input
+                  type="hidden"
+                  name="variant_id"
+                  shopify-attr--value="product.selectedOrFirstAvailableVariant.id"
+                />
+
+                <h3 class="subscription-title">Subscribe & save</h3>
+
+                <!-- <shopify-list-context
+                  query="product.selectedOrFirstAvailableVariant.sellingPlanAllocations"
+                  type="sellingPlanAllocation"
+                  first="10"
+                >
+                  <template>
+                    <shopify-money
+                      query="sellingPlanAllocation.checkoutChargeAmount"
+                    ></shopify-money>
+
+                    <shopify-data
+                      query="sellingPlanAllocation.sellingPlan.name"
+                    ></shopify-data>
+                  </template>
+                </shopify-list-context> -->
+
+                <!--  https://shopify.dev/docs/api/storefront-web-components/components/shopify-context : This defines which Shopify data will be available -->
+                <shopify-list-context
+                  query="product.sellingPlanGroups"
+                  type="sellingPlanGroup"
+                  first="10"
+                >
+                  <template>
+                    <div class="subscription-section">
+                      <div class="selling-plans">
+                        <shopify-list-context
+                          query="sellingPlanGroup.sellingPlans"
+                          type="sellingPlan"
+                          first="10"
+                        >
+                          <template>
+                            <!-- <shopify-money
+                              query="sellingPlan.priceAdjustments.adjustmentValue"
+                            ></shopify-money> -->
+
+                            <div class="selling-plan-option">
+                              <label class="selling-plan-label">
+                                <input
+                                  type="radio"
+                                  name="selling_plan"
+                                  class="selling-plan-radio"
+                                  shopify-attr--value="sellingPlan.id"
+                                />
+                                <div class="selling-plan-content">
+                                  <div class="selling-plan-header">
+                                    <span class="selling-plan-name">
+                                      <shopify-data
+                                        query="sellingPlan.name"
+                                      ></shopify-data>
+                                    </span>
+                                  </div>
+                                  <span class="selling-plan-description">
+                                    <shopify-data
+                                      query="sellingPlan.description"
+                                    ></shopify-data>
+                                  </span>
+                                </div>
+                              </label>
+                            </div>
+                          </template>
+                        </shopify-list-context>
+                      </div>
+                    </div>
+                  </template>
+                </shopify-list-context>
+
+                <button type="submit" class="add-to-cart-btn">
+                  <svg
+                    width="20"
+                    height="20"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="2"
+                  >
+                    <path
+                      d="M9 22C9.55228 22 10 21.5523 10 21C10 20.4477 9.55228 20 9 20C8.44772 20 8 20.4477 8 21C8 21.5523 8.44772 22 9 22Z"
+                    ></path>
+                    <path
+                      d="M20 22C20.5523 22 21 21.5523 21 21C21 20.4477 20.5523 20 20 20C19.4477 20 19 20.4477 19 21C19 21.5523 19.4477 22 20 22Z"
+                    ></path>
+                    <path
+                      d="M1 1H5L7.68 14.39C7.77144 14.8504 8.02191 15.264 8.38755 15.5583C8.75318 15.8526 9.2107 16.009 9.68 16H19.4C19.8693 16.009 20.3268 15.8526 20.6925 15.5583C21.0581 15.264 21.3086 14.8504 21.4 14.39L23 6H6"
+                    ></path>
+                  </svg>
+                  Add to Cart
+                </button>
+              </form>
+            </div>
+          </div>
+        </div>
+      </template>
+    </shopify-context>
+  </body>
+
+  <script>
+    function addToCart(event) {
+      event.preventDefault();
+      const data = new FormData(event.target);
+      const sellingPlanId = data.get("selling_plan");
+
+      if (sellingPlanId) {
+        const cart = document.getElementById("cart");
+
+        cart.addLine({
+          variantId: data.get("variant_id"),
+          quantity: 1,
+          sellingPlanId: sellingPlanId,
+        });
+        cart.showModal();
+      }
+    }
+  </script>
+</html>
